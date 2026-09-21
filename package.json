@@ -6,7 +6,8 @@
   "description": "Chrome extension for preparing repetitive email outreach.",
   "scripts": {
     "test": "node --test test/utils.test.js",
-    "check": "node --check src/background.js && node --check src/options.js && node --check src/utils.js && node -e \"JSON.parse(require('fs').readFileSync('manifest.json','utf8')); console.log('manifest.json: OK')\"
+    "check": "node --check src/background.js && node --check src/options.js && node --check src/utils.js && node -e \"JSON.parse(require('fs').readFileSync('manifest.json','utf8')); console.log('manifest.json: OK')\"",
+    "validate": "npm run check && npm test"
   },
   "engines": {
     "node": ">=20"
