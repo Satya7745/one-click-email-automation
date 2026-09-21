@@ -19,10 +19,8 @@
 
     <section class="card">
       <div class="card-header">
-        <div>
-          <h2>Compose behavior</h2>
-          <p>Choose where the prepared message should open.</p>
-        </div>
+        <h2>Compose behavior</h2>
+        <p>Choose where the prepared message should open.</p>
       </div>
 
       <label class="field">
@@ -53,23 +51,47 @@
       <label class="field">
         <span>Message body</span>
         <textarea id="body" rows="14" placeholder="Write your reusable email template..."></textarea>
-        <small>Supported placeholders: <code>{{name}}</code> and <code>{{email}}</code>.</small>
+        <small>Supported placeholders: <code>{{name}}</code>, <code>{{email}}</code>, <code>{{senderName}}</code>.</small>
       </label>
+
+      <div class="attachment">
+        <div>
+          <h3>Resume attachment</h3>
+          <p>Optional rule-based attachment from Google Drive.</p>
+        </div>
+
+        <label class="switch-row">
+          <input id="attachResume" type="checkbox">
+          <span>Attach resume</span>
+        </label>
+
+        <label class="field">
+          <span>Google Drive file ID</span>
+          <input id="resumeDriveFileId" type="text" placeholder="Paste the Drive file ID">
+          <small>For example, from a URL like <code>drive.google.com/file/d/FILE_ID/view</code>.</small>
+        </label>
+
+        <label class="field">
+          <span>Attachment label</span>
+          <input id="resumeLabel" type="text" placeholder="Resume">
+        </label>
+      </div>
 
       <div class="actions">
         <button id="reset" class="secondary" type="button">Reset defaults</button>
         <button id="save" class="primary" type="button">Save settings</button>
       </div>
+
       <p id="status" class="status" role="status" aria-live="polite"></p>
     </section>
 
     <section class="info">
       <strong>Workflow</strong>
-      <span>Right-click an email → <b>Send Email</b> → review the prepared message → send.</span>
+      <span>Right-click an email → <b>Send Email</b> → prepare message → optionally attach Drive file → review → send.</span>
     </section>
 
     <footer>
-      <span>Prototype v0.1.0</span>
+      <span>Prototype v0.2.0</span>
       <span>No email is sent automatically.</span>
     </footer>
   </main>
