@@ -1,4 +1,4 @@
-const STORAGE_KEY = "emailAutomationSettings";
+const STORAGE_KEY = "emailAutomationSettingsV2";
 
 const DEFAULTS = {
   composeMode: "gmail",
@@ -29,6 +29,7 @@ load();
 
 document.getElementById("save").addEventListener("click", save);
 document.getElementById("reset").addEventListener("click", reset);
+document.getElementById("connectGoogle").addEventListener("click", connectGoogle);
 attachResume.addEventListener("change", refreshAttachmentState);
 composeMode.addEventListener("change", refreshAttachmentState);
 
@@ -48,6 +49,18 @@ async function save() {
   const settings = readForm();
   await chrome.storage.sync.set({ [STORAGE_KEY]: settings });
   showStatus("Settings saved.");
+}
+
+async function connectGoogle() {
+  try {
+    const result = await chrome.identity.getAuthToken({ interactive: true });
+    if (!result?.token) {
+      throw new Error("Google authorization did not return an access token.");
+    }
+    showStatus("Google connected.");
+  } catch (error) {
+    showStatus(`Google connection failed: ${error.message}`);
+  }
 }
 
 async function reset() {
