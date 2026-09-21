@@ -52,14 +52,31 @@ async function save() {
 }
 
 async function connectGoogle() {
+  const button = document.getElementById("connectGoogle");
+  button.disabled = true;
+  showStatus("Connecting to Google…");
+
   try {
     const result = await chrome.identity.getAuthToken({ interactive: true });
+
     if (!result?.token) {
-      throw new Error("Google authorization did not return an access token.");
+      throw new Error("Google did not return an access token.");
     }
-    showStatus("Google connected.");
+
+    showStatus("Google connected. You can now enable Attach resume.");
   } catch (error) {
-    showStatus(`Google connection failed: ${error.message}`);
+    const message = error?.message || String(error);
+    console.error("[One-Click Email Automation] Google connection failed:", error);
+
+    if (message.toLowerCase().includes("oauth")) {
+      showStatus("Google OAuth is not configured. Check manifest.json and Google Cloud.");
+    } else if (message.toLowerCase().includes("access_denied")) {
+      showStatus("Access denied. Add your Google account as a test user in Google Cloud.");
+    } else {
+      showStatus(`Google connection failed: ${message}`);
+    }
+  } finally {
+    button.disabled = false;
   }
 }
 
