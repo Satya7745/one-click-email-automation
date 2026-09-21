@@ -11,7 +11,7 @@ import {
 } from "./google.js";
 
 const MENU_ID = "one-click-email-send";
-const STORAGE_KEY = "emailAutomationSettings";
+const STORAGE_KEY = "emailAutomationSettingsV2";
 
 const DEFAULTS = {
   composeMode: "gmail",
@@ -59,7 +59,7 @@ chrome.contextMenus.onClicked.addListener(async (info) => {
       });
 
       await chrome.tabs.create({
-        url: `https://mail.google.com/mail/u/0/#drafts/${draft.id}`
+        url: "https://mail.google.com/mail/u/0/#drafts"
       });
       return;
     }
