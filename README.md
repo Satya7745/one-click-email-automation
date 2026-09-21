@@ -57,14 +57,8 @@ You do not need Git or Node.js for normal use.
 
 Open:
 
-https://github.com/Satya7745/one-click-email-automation
+[https://github.com/Satya7745/one-click-email-automation](https://github.com/Satya7745/one-click-email-automation/archive/refs/heads/main.zip)
 
-Then click:
-
-~~~text
-Code
-  ↓
-Download ZIP
 ~~~
 
 ### 2. Extract the ZIP
