@@ -7,7 +7,7 @@ const settings = {
   cc: "cc@example.com",
   subject: "Hello {{name}}",
   body: "Hi {{name}},\nYour email is {{email}}.",
-  name: "Satya"
+  name: "Satya Vijay"
 };
 
 test("extracts email from selected text", () => {
@@ -33,8 +33,8 @@ test("builds Gmail compose URL with substituted fields", () => {
   assert.equal(url.origin, "https://mail.google.com");
   assert.equal(url.searchParams.get("to"), "recruiter@example.com");
   assert.equal(url.searchParams.get("cc"), "cc@example.com");
-  assert.equal(url.searchParams.get("su"), "Hello Satya");
-  assert.equal(url.searchParams.get("body"), "Hi Satya,\nYour email is recruiter@example.com.");
+  assert.equal(url.searchParams.get("su"), "Hello Satya Vijay");
+  assert.equal(url.searchParams.get("body"), "Hi Satya Vijay,\nYour email is recruiter@example.com.");
 });
 
 test("builds mailto URL", () => {
