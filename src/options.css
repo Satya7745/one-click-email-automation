@@ -43,6 +43,7 @@ button { border: 0; border-radius: 9px; padding: 11px 17px; font: inherit; font-
 .primary { background: #4f5bd5; color: #fff; }
 .primary:hover { background: #414dbb; }
 .secondary { background: #eef1f6; color: #334155; }
+.hint { margin: 8px 0 0; color: #64748b; font-size: 12px; text-align: right; }
 .status { min-height: 20px; margin: 10px 0 0; color: #23734a; font-size: 13px; text-align: right; }
 .info { display: flex; gap: 10px; margin-top: 16px; padding: 15px 18px; color: #475569; font-size: 14px; }
 .info strong { color: #172033; }
