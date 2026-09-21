@@ -1,129 +1,463 @@
 # One-Click Email Automation
 
-A lightweight Chrome extension for preparing repetitive email outreach in seconds.
+> Prepare repetitive outreach emails in seconds — without manually retyping the same information.
 
-The extension adds a **Send Email** option to the browser context menu when an email address is selected or linked. It loads a saved template, substitutes supported variables, and opens a prepared Gmail or mailto compose window.
+A lightweight **Chrome extension** that turns an email address on any webpage into a ready-to-review email.
 
-> **Design principle:** automate preparation, not sending. The user reviews and explicitly sends the email.
+**Select an email → right-click → Send Email → review → send.**
 
-## Features
+No backend. No API keys. No terminal commands are required for normal use.
 
-- Chrome Manifest V3
-- Right-click email addresses and choose **Send Email**
-- Gmail compose URL support
-- mailto fallback
-- Configurable sender name, CC, subject, and body
-- Template variables: `{{name}}`, `{{email}}`
-- Local Chrome storage only
-- No backend, database, or external API
-- No automatic sending
-- Unit tests and GitHub Actions validation
+---
 
-## Project Structure
+## What this extension does
 
-```text
-one-click-email-automation/
-├── .github/workflows/validate.yml
-├── icons/
-├── src/
-│   ├── background.js
-│   ├── options.css
-│   ├── options.html
-│   ├── options.js
-│   └── utils.js
-├── test/
-│   └── utils.test.js
-├── .gitignore
-├── LICENSE
-├── manifest.json
-├── package.json
-└── README.md
-```
+When you right-click an email address, the extension:
 
-## Installation
+1. Finds the email address.
+2. Loads your saved email template.
+3. Replaces placeholders such as <code>{{name}}</code> and <code>{{email}}</code>.
+4. Opens a pre-filled Gmail compose window (or your default mail client).
+5. Lets **you review and send the email manually**.
 
-1. Clone the repository.
-2. Open `chrome://extensions`.
-3. Enable **Developer mode**.
-4. Select **Load unpacked**.
-5. Choose the repository directory.
-6. Open the extension's **Options** page and configure your template.
+### What it does NOT do
 
-## Usage
+- It does **not** automatically send emails.
+- It does **not** ask for your Gmail password.
+- It does **not** require a backend or database.
+- It does **not** upload your templates to a server.
 
-1. Find an email address on a webpage.
-2. Select the email address, or right-click a `mailto:` link.
-3. Choose **Send Email**.
-4. The extension prepares the recipient, subject, CC, and body.
-5. Review the message in Gmail or your default mail client.
-6. Send it manually.
+---
 
-## Template Variables
+# Install in under 1 minute
 
-| Variable | Meaning |
-|---|---|
-| `{{email}}` | Recipient email address |
-| `{{name}}` | Best-effort name derived from the selected text or email |
+There are two ways to install the extension. **For most users, Method A is the easiest.**
+
+## Method A — Download ZIP (recommended)
+
+No Git and no command line required.
+
+### 1. Download the project
+
+Open the repository:
+
+https://github.com/Satya7745/one-click-email-automation
+
+Then click:
+
+~~~text
+Code
+  ↓
+Download ZIP
+~~~
+
+### 2. Extract the ZIP
+
+Extract the downloaded file somewhere permanent, for example:
+
+~~~text
+Documents/
+└── one-click-email-automation/
+~~~
+
+**Important:** Keep the extracted folder. Chrome loads the extension directly from this folder.
+
+### 3. Open Chrome Extensions
+
+In Chrome, open:
+
+~~~text
+chrome://extensions
+~~~
+
+Turn on:
+
+~~~text
+Developer mode
+~~~
+
+### 4. Load the extension
+
+Click:
+
+~~~text
+Load unpacked
+~~~
+
+Select the **extracted one-click-email-automation folder**.
+
+You should now see:
+
+**One-Click Email Automation**
+
+installed in Chrome.
+
+### 5. Configure your template
+
+On the extension card:
+
+~~~text
+Details
+  ↓
+Extension options
+~~~
+
+Configure:
+
+- Your name
+- CC address (optional)
+- Compose mode
+- Subject
+- Message body
+
+Click **Save settings**.
+
+### 6. Use it
+
+Find an email address on a webpage.
 
 Example:
 
-```text
-Subject:
-AI/ML Engineer Opportunity — {{name}}
+~~~text
+recruiter@example.com
+~~~
 
-Body:
+Select the email address, then:
+
+~~~text
+Right-click
+   ↓
+Send Email
+~~~
+
+A prepared email opens.
+
+**Review it → make any changes → Send.**
+
+---
+
+# Method B — Clone with Git
+
+For developers:
+
+~~~bash
+git clone https://github.com/Satya7745/one-click-email-automation.git
+cd one-click-email-automation
+~~~
+
+Then open:
+
+~~~text
+chrome://extensions
+~~~
+
+Enable **Developer mode** → **Load unpacked** → select the cloned folder.
+
+---
+
+# First-time setup
+
+You only need to configure the template once.
+
+### Example configuration
+
+**Your name**
+
+~~~text
+Satya Vijay
+~~~
+
+**CC**
+
+~~~text
+optional@example.com
+~~~
+
+**Subject**
+
+~~~text
+AI/ML Engineer Opportunity — {{name}}
+~~~
+
+**Body**
+
+~~~text
 Hi {{name}},
 
-I came across an opportunity that looks relevant to my background. I would be interested in discussing the role.
+I wanted to reach out regarding an AI/ML opportunity that may be relevant
+to my background.
+
+Please let me know if we can connect and discuss the role.
+
+Best regards,
+Satya Vijay
+~~~
+
+After saving, the same template can be reused for every email.
+
+---
+
+# Supported placeholders
+
+| Placeholder | Replaced with |
+|---|---|
+| <code>{{email}}</code> | The detected recipient email address |
+| <code>{{name}}</code> | The selected name, when available |
+
+### Example
+
+Template:
+
+~~~text
+Hi {{name}},
+
+I am reaching out regarding an opportunity.
 
 Regards,
-Your Name
-```
+Satya Vijay
+~~~
 
-## Development
+For:
 
-Install dependencies:
+~~~text
+Jane Doe <jane.doe@example.com>
+~~~
 
-```bash
-npm install
-```
+the prepared message becomes:
 
-Run tests:
+~~~text
+Hi Jane Doe,
 
-```bash
-npm test
-```
+I am reaching out regarding an opportunity.
 
-Run syntax validation:
+Regards,
+Satya Vijay
+~~~
 
-```bash
-npm run check
-```
+---
 
-The extension itself requires no build step.
+# Supported compose modes
 
-## Security & Privacy
+## Gmail
 
-The extension is intentionally minimal:
+Opens a Gmail web compose URL with the recipient, CC, subject, and body pre-filled.
 
+Recommended when you use Gmail in the browser.
+
+## Default mail client
+
+Uses a standard <code>mailto:</code> link and lets the operating system/browser open the configured email application.
+
+---
+
+# Everyday workflow
+
+Once installed, the workflow is intentionally simple:
+
+~~~text
+┌──────────────────────────┐
+│ Find email address       │
+└────────────┬─────────────┘
+             ↓
+┌──────────────────────────┐
+│ Right-click              │
+└────────────┬─────────────┘
+             ↓
+┌──────────────────────────┐
+│ Send Email               │
+└────────────┬─────────────┘
+             ↓
+┌──────────────────────────┐
+│ Template is populated    │
+└────────────┬─────────────┘
+             ↓
+┌──────────────────────────┐
+│ Review the email         │
+└────────────┬─────────────┘
+             ↓
+┌──────────────────────────┐
+│ Send manually            │
+└──────────────────────────┘
+~~~
+
+The goal is to remove repetitive typing while keeping the final action under the user's control.
+
+---
+
+# Project structure
+
+~~~text
+one-click-email-automation/
+│
+├── .github/
+│   └── workflows/
+│       └── validate.yml
+│
+├── icons/
+│   ├── icon16.png
+│   ├── icon32.png
+│   ├── icon48.png
+│   └── icon128.png
+│
+├── src/
+│   ├── background.js      # Context-menu workflow
+│   ├── options.css        # Settings UI
+│   ├── options.html       # Settings page
+│   ├── options.js         # Settings persistence
+│   └── utils.js            # Email parsing + URL generation
+│
+├── test/
+│   └── utils.test.js      # Unit tests
+│
+├── .gitignore
+├── LICENSE
+├── manifest.json          # Chrome MV3 configuration
+├── package.json
+└── README.md
+~~~
+
+---
+
+# Permissions
+
+The extension requests only these Chrome permissions:
+
+| Permission | Why it is needed |
+|---|---|
+| <code>contextMenus</code> | Adds the **Send Email** right-click action |
+| <code>storage</code> | Saves your email template/settings in Chrome storage |
+
+The extension does not require broad webpage access for its core workflow.
+
+---
+
+# Privacy & security
+
+This prototype is intentionally lightweight.
+
+- Your email template is stored using Chrome extension storage.
 - No email credentials are collected.
-- No email is automatically sent.
-- Template settings are stored using Chrome's local extension storage.
-- No external service is required.
-- The extension only needs the permissions required for context menus and local storage.
+- No external server is required.
+- No API key is required.
+- No automatic sending occurs.
+- The recipient, subject, CC, and body are passed to the compose URL opened by your browser.
 
-## Roadmap
+**Always review the recipient and message before sending.**
+
+---
+
+# Troubleshooting
+
+### I do not see "Send Email"
+
+Make sure you:
+
+1. Reload the extension from <code>chrome://extensions</code>.
+2. Select an actual email address, or right-click a <code>mailto:</code> link.
+3. Right-click the selection again.
+
+### I installed the extension but nothing happens
+
+Open:
+
+~~~text
+chrome://extensions
+  → One-Click Email Automation
+  → Errors
+~~~
+
+If Chrome reports an error, reload the extension and try again.
+
+### Gmail opens but the message is not populated correctly
+
+Check the template under:
+
+~~~text
+Details
+  → Extension options
+~~~
+
+Then save the settings and retry.
+
+### I changed the code
+
+After making code changes:
+
+~~~text
+chrome://extensions
+  → Reload
+~~~
+
+You normally do not need to reinstall the extension.
+
+---
+
+# Development
+
+Normal users **do not need Node.js or npm**.
+
+For contributors/developers:
+
+~~~bash
+npm test
+npm run check
+npm run validate
+~~~
+
+The extension itself has **no build step**.
+
+GitHub Actions also runs the validation workflow on pushes and pull requests.
+
+---
+
+# Roadmap
+
+Planned improvements:
 
 - Multiple reusable templates
-- `{{company}}` and `{{role}}` variables
-- Template selection before composing
-- Optional recruiter/company metadata
-- Compose preview popup
-- Import/export configuration
-- Microsoft Outlook compose support
+- <code>{{company}}</code> and <code>{{role}}</code> variables
+- Template picker before composing
+- Recruiter/company metadata
+- Preview popup before opening Gmail
+- Import/export settings
+- Outlook compose support
 - Better name extraction
-- Chrome Web Store packaging
+- Chrome Web Store distribution
 
-## License
+---
+
+# Why there is no "Install" button yet
+
+This repository is currently distributed as an **unpacked developer extension**.
+
+Chrome does not provide a normal one-click browser installation flow for an arbitrary GitHub repository. The practical options are:
+
+~~~text
+GitHub
+  ↓
+Download ZIP
+  ↓
+Load unpacked
+~~~
+
+For a production release, the natural next step is:
+
+~~~text
+Chrome Web Store
+  ↓
+Install extension
+~~~
+
+---
+
+# Version
+
+~~~text
+0.1.0
+~~~
+
+---
+
+# License
 
 MIT
