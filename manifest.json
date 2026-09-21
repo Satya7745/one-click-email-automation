@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "One-Click Email Automation",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Prepare repetitive email outreach in seconds from any email address on a webpage.",
   "permissions": [
     "contextMenus",
