@@ -2,7 +2,11 @@ const DRIVE_API = "https://www.googleapis.com/drive/v3/files/";
 const GMAIL_DRAFTS_API = "https://gmail.googleapis.com/gmail/v1/users/me/drafts";
 
 export async function getGoogleAccessToken() {
-  return chrome.identity.getAuthToken({ interactive: true });
+  const result = await chrome.identity.getAuthToken({ interactive: true });
+  if (!result?.token) {
+    throw new Error("Google authorization did not return an access token.");
+  }
+  return result.token;
 }
 
 export async function getDriveFile(token, fileId) {
