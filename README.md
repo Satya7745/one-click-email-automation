@@ -1,45 +1,61 @@
 # One-Click Email Automation
 
-> Prepare repetitive outreach emails in seconds — without manually retyping the same information.
+> Turn repetitive recruiter outreach into a few clicks.
 
-A lightweight **Chrome extension** that turns an email address on any webpage into a ready-to-review email.
+**Find email → Right-click → Send Email → Review → Send**
 
-**Select an email → right-click → Send Email → review → send.**
+A lightweight Chrome extension for preparing repetitive outreach emails. It can prefill Gmail with your recipient, CC, subject, and message, and optionally attach a resume stored in Google Drive.
 
-No backend. No API keys. No terminal commands are required for normal use.
-
----
-
-## What this extension does
-
-When you right-click an email address, the extension:
-
-1. Finds the email address.
-2. Loads your saved email template.
-3. Replaces placeholders such as <code>{{name}}</code> and <code>{{email}}</code>.
-4. Opens a pre-filled Gmail compose window (or your default mail client).
-5. Lets **you review and send the email manually**.
-
-### What it does NOT do
-
-- It does **not** automatically send emails.
-- It does **not** ask for your Gmail password.
-- It does **not** require a backend or database.
-- It does **not** upload your templates to a server.
+**The extension never sends the email automatically. You always review and click Send.**
 
 ---
 
-# Install in under 1 minute
+## What it does
 
-There are two ways to install the extension. **For most users, Method A is the easiest.**
+### Basic email automation
 
-## Method A — Download ZIP (recommended)
+- Right-click an email address on a webpage
+- Detect the recipient automatically
+- Populate a reusable subject and message
+- Support <code>{{name}}</code>, <code>{{email}}</code>, and <code>{{senderName}}</code>
+- Open a ready-to-review Gmail compose
+- Optional <code>mailto:</code> mode
 
-No Git and no command line required.
+### Resume attachment
+
+When enabled, the extension uses a simple rule:
+
+~~~text
+Attach resume = ON
++
+Google Drive file ID configured
++
+Gmail mode
+        ↓
+Download the configured Drive file
+        ↓
+Create a Gmail draft
+        ↓
+Attach the resume
+        ↓
+Open the draft
+        ↓
+You review and send
+~~~
+
+This is **100% rule-based**. There is no AI making the attachment decision.
+
+---
+
+# Install
+
+## Recommended: Download ZIP
+
+You do not need Git or Node.js for normal use.
 
 ### 1. Download the project
 
-Open the repository:
+Open:
 
 https://github.com/Satya7745/one-click-email-automation
 
@@ -53,18 +69,19 @@ Download ZIP
 
 ### 2. Extract the ZIP
 
-Extract the downloaded file somewhere permanent, for example:
+Extract it somewhere permanent.
+
+The folder you eventually select in Chrome must directly contain:
 
 ~~~text
-Documents/
-└── one-click-email-automation/
+manifest.json
+icons/
+src/
 ~~~
 
-**Important:** Keep the extracted folder. Chrome loads the extension directly from this folder.
+### 3. Load it into Chrome
 
-### 3. Open Chrome Extensions
-
-In Chrome, open:
+Open:
 
 ~~~text
 chrome://extensions
@@ -76,404 +93,169 @@ Turn on:
 Developer mode
 ~~~
 
-### 4. Load the extension
-
 Click:
 
 ~~~text
 Load unpacked
 ~~~
 
-Select the **extracted one-click-email-automation folder**.
+Select the folder containing <code>manifest.json</code>.
 
 You should now see:
 
 **One-Click Email Automation**
 
-installed in Chrome.
+---
 
-### 5. Configure your template
+# One-time Google setup
 
-On the extension card:
+> Skip this section when you only want the basic Gmail compose flow.
+>
+> You need this setup only for the **Google Drive resume attachment** feature.
 
-~~~text
-Details
-  ↓
-Extension options
-~~~
+The extension uses Chrome's Identity API for Google OAuth, the Drive API to read the resume, and the Gmail API to create the draft. Google documents these APIs here:
 
-Configure:
+- Chrome Identity API: https://developer.chrome.com/docs/extensions/reference/api/identity
+- OAuth credentials: https://developers.google.com/workspace/guides/create-credentials
+- Drive downloads: https://developers.google.com/workspace/drive/api/guides/manage-downloads
+- Gmail drafts: https://developers.google.com/workspace/gmail/api/guides/drafts
 
-- Your name
-- CC address (optional)
-- Compose mode
-- Subject
-- Message body
+## Step 1 — Create or select a Google Cloud project
 
-Click **Save settings**.
+Open:
 
-### 6. Use it
+https://console.cloud.google.com/
 
-Find an email address on a webpage.
+Create or select a project.
 
 Example:
 
 ~~~text
-recruiter@example.com
-~~~
-
-Select the email address, then:
-
-~~~text
-Right-click
-   ↓
-Send Email
-~~~
-
-A prepared email opens.
-
-**Review it → make any changes → Send.**
-
----
-
-# Method B — Clone with Git
-
-For developers:
-
-~~~bash
-git clone https://github.com/Satya7745/one-click-email-automation.git
-cd one-click-email-automation
-~~~
-
-Then open:
-
-~~~text
-chrome://extensions
-~~~
-
-Enable **Developer mode** → **Load unpacked** → select the cloned folder.
-
----
-
-# First-time setup
-
-You only need to configure the template once.
-
-### Example configuration
-
-**Your name**
-
-~~~text
-Satya Vijay
-~~~
-
-**CC**
-
-~~~text
-optional@example.com
-~~~
-
-**Subject**
-
-~~~text
-AI/ML Engineer Opportunity — {{name}}
-~~~
-
-**Body**
-
-~~~text
-Hi {{name}},
-
-I wanted to reach out regarding an AI/ML opportunity that may be relevant
-to my background.
-
-Please let me know if we can connect and discuss the role.
-
-Best regards,
-Satya Vijay
-~~~
-
-After saving, the same template can be reused for every email.
-
----
-
-# Supported placeholders
-
-| Placeholder | Replaced with |
-|---|---|
-| <code>{{email}}</code> | The detected recipient email address |
-| <code>{{name}}</code> | The selected name, when available |
-
-### Example
-
-Template:
-
-~~~text
-Hi {{name}},
-
-I am reaching out regarding an opportunity.
-
-Regards,
-Satya Vijay
-~~~
-
-For:
-
-~~~text
-Jane Doe <jane.doe@example.com>
-~~~
-
-the prepared message becomes:
-
-~~~text
-Hi Jane Doe,
-
-I am reaching out regarding an opportunity.
-
-Regards,
-Satya Vijay
-~~~
-
----
-
-# Supported compose modes
-
-## Gmail
-
-Opens a Gmail web compose URL with the recipient, CC, subject, and body pre-filled.
-
-Recommended when you use Gmail in the browser.
-
-## Default mail client
-
-Uses a standard <code>mailto:</code> link and lets the operating system/browser open the configured email application.
-
----
-
-# Optional: automatically attach your Google Drive resume
-
-The extension can also attach a file from Google Drive to the Gmail **draft** it creates.
-
-**Current default:** Attach resume is OFF. Your resume file ID is pre-configured, so you only need to enable the attachment rule after completing Google OAuth setup.
-
-This is still **rule-based**. There is no AI deciding whether to attach the file.
-
-The rule is:
-
-```text
-Attach resume = ON
-        +
-Google Drive file ID configured
-        +
-Gmail compose mode
-        ↓
-Fetch configured Drive file
-        ↓
-Create Gmail draft with attachment
-        ↓
-Open the draft for review
-        ↓
-User sends manually
-```
-
-When **Attach resume** is OFF, the extension continues to use the normal Gmail compose URL and no Google API access is needed for that workflow.
-
-## One-time Google setup
-
-Drive/Gmail attachment support requires Google OAuth because the extension must be authorized to read the configured Drive file and create a Gmail draft. Chrome extensions can obtain OAuth tokens through the Identity API, while the Drive API supports downloading file content and the Gmail API supports creating drafts from RFC 2822/MIME messages. citeturn387847search1turn387847search2turn387847search4
-
-### 1. Create a Google Cloud project
-
-Open the Google Cloud Console and create/select a project.
-
-Enable:
-
-- Google Drive API
-- Gmail API
-
-### 2. Create a Chrome Extension OAuth client
-
-In **Google Cloud Console → Google Auth Platform → Clients**, create an OAuth client with application type **Chrome Extension**.
-
-Google's current documentation says a Chrome Extension OAuth client is associated with the extension's 32-character Chrome extension ID. citeturn538275search1turn538275search6
-
-### 3. Get your extension ID
-
-After loading the unpacked extension:
-
-```text
-chrome://extensions
-       ↓
 One-Click Email Automation
-       ↓
-Extension ID
-```
+~~~
 
-Use this value as the **Item ID** when creating the Chrome Extension OAuth client.
-
-### 4. Put the OAuth client ID in `manifest.json`
-
-Replace:
-
-```json
-"client_id": "YOUR_GOOGLE_OAUTH_CLIENT_ID.apps.googleusercontent.com"
-```
-
-with the client ID generated by Google.
-
-The manifest already declares the required OAuth scopes:
-
-```text
-https://www.googleapis.com/auth/drive.readonly
-https://www.googleapis.com/auth/gmail.compose
-```
-
-Google documents `drive.readonly` as allowing Drive file viewing/downloading, while `gmail.compose` is used for draft/compose operations. citeturn387847search5turn387847search4
-
-### 5. Reload the extension
-
-Open:
-
-```text
-chrome://extensions
-```
-
-and click **Reload**.
-
-### 6. Configure the attachment rule
-
-Open:
-
-```text
-Details
-  ↓
-Extension options
-  ↓
-Resume attachment
-```
+## Step 2 — Enable the APIs
 
 Enable:
 
-```text
-☑ Attach resume
-```
-
-Then paste the Google Drive **file ID**.
-
-For a URL such as:
-
-```text
-https://drive.google.com/file/d/FILE_ID/view
-```
-
-the value to paste is:
-
-```text
-FILE_ID
-```
-
-The Drive API requires authorization to download file content. citeturn387847search2
-
-### 7. First use
-
-The first time the attachment rule is used, Google may ask you to authorize the extension.
-
-After authorization:
-
-```text
-Right-click recruiter email
-        ↓
-Send Email
-        ↓
-Drive resume fetched
-        ↓
-Gmail draft created
-        ↓
-Resume attached
-        ↓
-Review
-        ↓
-Send
-```
-
-### Important limitation
-
-This feature is intended for regular binary files such as PDF resumes. Google Workspace-native files (for example Google Docs) require an **export** operation rather than a normal `alt=media` download. citeturn387847search2turn387847search8
-
-For a resume, using a PDF stored in Drive is the simplest option.
-
----
-
-# Everyday workflow
-
-Once installed, the workflow is intentionally simple:
-
 ~~~text
-┌──────────────────────────┐
-│ Find email address       │
-└────────────┬─────────────┘
-             ↓
-┌──────────────────────────┐
-│ Right-click              │
-└────────────┬─────────────┘
-             ↓
-┌──────────────────────────┐
-│ Send Email               │
-└────────────┬─────────────┘
-             ↓
-┌──────────────────────────┐
-│ Template is populated    │
-└────────────┬─────────────┘
-             ↓
-┌──────────────────────────┐
-│ Review the email         │
-└────────────┬─────────────┘
-             ↓
-┌──────────────────────────┐
-│ Send manually            │
-└──────────────────────────┘
+Gmail API
+Google Drive API
 ~~~
 
-The goal is to remove repetitive typing while keeping the final action under the user's control.
+## Step 3 — Add yourself as a test user
 
----
-
-# Project structure
+Open:
 
 ~~~text
-one-click-email-automation/
-│
-├── .github/
-│   └── workflows/
-│       └── validate.yml
-│
-├── icons/
-│   ├── icon16.png
-│   ├── icon32.png
-│   ├── icon48.png
-│   └── icon128.png
-│
-├── src/
-│   ├── background.js      # Context-menu workflow + rules
-│   ├── google.js          # Drive download + Gmail draft attachment
-│   ├── options.css        # Settings UI styling
-│   ├── options.html       # Settings page
-│   ├── options.js         # Settings persistence + Google connection
-│   └── utils.js           # Email parsing + compose URL generation
-│
-├── test/
-│   └── utils.test.js      # Unit tests
-│
-├── .gitignore
-├── LICENSE
-├── manifest.json          # Chrome MV3 + OAuth configuration
-├── package.json
-└── README.md
+Google Auth Platform
+→ Audience
+→ Test users
 ~~~
+
+Add the Google account you will use with the extension.
+
+This is important while the OAuth application is still in testing.
+
+## Step 4 — Get the Chrome extension ID
+
+After loading the extension:
+
+~~~text
+chrome://extensions
+→ One-Click Email Automation
+→ Extension ID
+~~~
+
+Copy the 32-character extension ID.
+
+## Step 5 — Create the OAuth Client ID
+
+Go to:
+
+~~~text
+Google Auth Platform
+→ Clients
+→ Create Client
+~~~
+
+Choose:
+
+~~~text
+Application type:
+Chrome Extension
+~~~
+
+Enter the extension ID as the **Item ID**.
+
+Google's current credential documentation specifically describes the Chrome Extension client type and Item ID requirement:
+
+https://developers.google.com/workspace/guides/create-credentials
+
+## Step 6 — Add the Client ID to the extension
+
+Open:
+
+~~~text
+manifest.json
+~~~
+
+Find:
+
+~~~json
+"client_id": "YOUR_GOOGLE_OAUTH_CLIENT_ID.apps.googleusercontent.com"
+~~~
+
+Replace it with the Client ID generated by Google.
+
+Example:
+
+~~~json
+"client_id": "123456789012-abcdefghijklmnop.apps.googleusercontent.com"
+~~~
+
+**Do not add a client secret to the extension.**
+
+## Step 7 — Reload the extension
+
+Open:
+
+~~~text
+chrome://extensions
+~~~
+
+Click **Reload** on One-Click Email Automation.
 
 ---
 
-# Current default configuration
+# Configure the extension
+
+Open:
+
+~~~text
+chrome://extensions
+→ One-Click Email Automation
+→ Details
+→ Extension options
+~~~
+
+The settings page contains:
+
+- Compose mode
+- Your name
+- CC
+- Subject
+- Message body
+- Attach resume
+- Google Drive file ID
+- Attachment label
+- Connect Google
+- Save settings
+- Reset defaults
+
+---
+
+# Default recruiter configuration
 
 The prototype is pre-configured for your recruiter outreach workflow:
 
@@ -481,159 +263,348 @@ The prototype is pre-configured for your recruiter outreach workflow:
 Name:
 Satya Vijay
 
-Compose mode:
-Gmail
+Subject:
+AI/ML Engineer | 3.2 Years | LLMs, RAG & Agentic AI (Open to opportunities)
+
+Resume:
+Satya Vijay - Resume.pdf
+
+Drive file ID:
+1N9SC-cyHicZQe-9xohpLRCT6hL4XK2W1
+~~~
+
+The resume attachment is **OFF by default** until Google OAuth is connected.
+
+---
+
+# Connect Google
+
+In Extension options, click:
+
+~~~text
+Connect Google
+~~~
+
+Google will ask you to authorize the requested permissions.
+
+When successful, the extension shows:
+
+~~~text
+Google connected.
+~~~
+
+You do **not** manually copy an access token. Chrome obtains the OAuth access token through the Identity API.
+
+---
+
+# Enable the resume attachment
+
+In Extension options:
+
+~~~text
+Resume attachment
+→ ☑ Attach resume
+~~~
+
+Use your Google Drive file ID.
+
+For a URL such as:
+
+~~~text
+https://drive.google.com/file/d/FILE_ID/view
+~~~
+
+the file ID is:
+
+~~~text
+FILE_ID
+~~~
+
+For your current resume:
+
+~~~text
+1N9SC-cyHicZQe-9xohpLRCT6hL4XK2W1
+~~~
+
+Click:
+
+~~~text
+Save settings
+~~~
+
+For the simplest setup, keep your resume as a normal PDF file in Google Drive. The Drive API downloads binary/blob files using <code>files.get</code> with <code>alt=media</code>. Google Workspace-native files such as Docs use an export flow instead.
+
+Reference:
+
+https://developers.google.com/workspace/drive/api/guides/manage-downloads
+
+---
+
+# Daily usage
+
+## Without attachment
+
+~~~text
+Find recruiter email
+      ↓
+Select email
+      ↓
+Right-click
+      ↓
+Send Email
+      ↓
+Gmail opens
+      ↓
+Review
+      ↓
+Send
+~~~
+
+## With resume attachment
+
+~~~text
+Find recruiter email
+      ↓
+Select email
+      ↓
+Right-click
+      ↓
+Send Email
+      ↓
+Drive resume fetched
+      ↓
+Gmail draft created
+      ↓
+Resume attached
+      ↓
+Review
+      ↓
+Send
+~~~
+
+---
+
+# Example
+
+Suppose you find:
+
+~~~text
+Jane Doe
+jane.doe@example.com
+~~~
+
+Select the email and choose:
+
+~~~text
+Right-click → Send Email
+~~~
+
+The extension detects the recipient and prepares your saved recruiter message.
+
+If resume attachment is enabled, it also creates a Gmail draft containing:
+
+~~~text
+To:
+jane.doe@example.com
 
 Subject:
 AI/ML Engineer | 3.2 Years | LLMs, RAG & Agentic AI (Open to opportunities)
 
-Resume file ID:
-1N9SC-cyHicZQe-9xohpLRCT6hL4XK2W1
-
-Resume label:
+Attachment:
 Satya Vijay - Resume.pdf
-
-Attach resume:
-OFF by default
 ~~~
 
-The attachment is intentionally **OFF by default** because Google OAuth is required before the extension can access Drive and create a Gmail draft with an attachment.
+You then review everything and click **Send**.
 
 ---
 
-# Permissions
+# Important: GitHub ZIP vs Chrome Web Store
 
-The extension requests only these Chrome permissions:
+The GitHub version is currently an **unpacked developer extension**.
 
-| Permission | Why it is needed |
-|---|---|
-| <code>contextMenus</code> | Adds the **Send Email** right-click action |
-| <code>storage</code> | Saves your email template/settings in Chrome storage |
-
-The extension does not require broad webpage access for its core workflow.
-
----
-
-# Privacy & security
-
-This prototype is intentionally lightweight.
-
-- Your email template is stored using Chrome extension storage.
-- No email credentials are collected.
-- No external server is required.
-- No API key is required.
-- No automatic sending occurs.
-- The recipient, subject, CC, and body are passed to the compose URL opened by your browser.
-
-**Always review the recipient and message before sending.**
-
----
-
-# Troubleshooting
-
-### I do not see "Send Email"
-
-Make sure you:
-
-1. Reload the extension from <code>chrome://extensions</code>.
-2. Select an actual email address, or right-click a <code>mailto:</code> link.
-3. Right-click the selection again.
-
-### I installed the extension but nothing happens
-
-Open:
-
-~~~text
-chrome://extensions
-  → One-Click Email Automation
-  → Errors
-~~~
-
-If Chrome reports an error, reload the extension and try again.
-
-### Gmail opens but the message is not populated correctly
-
-Check the template under:
-
-~~~text
-Details
-  → Extension options
-~~~
-
-Then save the settings and retry.
-
-### I changed the code
-
-After making code changes:
-
-~~~text
-chrome://extensions
-  → Reload
-~~~
-
-You normally do not need to reinstall the extension.
-
----
-
-# Development
-
-Normal users **do not need Node.js or npm**.
-
-For contributors/developers:
-
-~~~bash
-npm test
-npm run check
-npm run validate
-~~~
-
-The extension itself has **no build step**.
-
-GitHub Actions also runs the validation workflow on pushes and pull requests.
-
----
-
-# Roadmap
-
-Planned improvements:
-
-- Multiple reusable templates
-- <code>{{company}}</code> and <code>{{role}}</code> variables
-- Template picker before composing
-- Recruiter/company metadata
-- Preview popup before opening Gmail
-- Import/export settings
-- Outlook compose support
-- Better name extraction
-- Chrome Web Store distribution
-
----
-
-# Why there is no "Install" button yet
-
-This repository is currently distributed as an **unpacked developer extension**.
-
-Chrome does not provide a normal one-click browser installation flow for an arbitrary GitHub repository. The practical options are:
+So the installation flow is:
 
 ~~~text
 GitHub
   ↓
 Download ZIP
   ↓
+Extract
+  ↓
+chrome://extensions
+  ↓
+Developer mode
+  ↓
 Load unpacked
 ~~~
 
-For a production release, the natural next step is:
+A true **Add to Chrome** one-click installation requires publishing the extension through the Chrome Web Store.
+
+---
+
+# Troubleshooting
+
+## "Could not load manifest"
+
+You selected the wrong folder.
+
+Select the folder that directly contains:
 
 ~~~text
-Chrome Web Store
-  ↓
-Install extension
+manifest.json
+~~~
+
+## "Could not load icon"
+
+Download the latest repository ZIP again and confirm:
+
+~~~text
+manifest.json
+icons/
+└── icon16.png
+~~~
+
+are in the same extension root.
+
+## "Connect Google" does nothing
+
+First check:
+
+~~~text
+chrome://extensions
+→ One-Click Email Automation
+→ Errors
+~~~
+
+Then verify:
+
+1. Your OAuth Client ID is present in <code>manifest.json</code>.
+2. The OAuth client type is **Chrome Extension**.
+3. The Item ID matches the extension ID.
+4. Your Google account is added as a test user while the app is in testing.
+5. You reloaded the extension after changing <code>manifest.json</code>.
+
+## "Error 403: access_denied"
+
+Usually this means the Google account has not been added as an OAuth test user.
+
+Go to:
+
+~~~text
+Google Auth Platform
+→ Audience
+→ Test users
+~~~
+
+Add the account and try **Connect Google** again.
+
+## Resume attachment fails
+
+Check all of the following:
+
+~~~text
+☑ Attach resume
+Compose mode = Gmail
+Correct Drive file ID
+Google authorization completed
+Your Google account can access the file
 ~~~
 
 ---
 
-# Version
+# Permissions
+
+The extension uses:
+
+| Permission | Purpose |
+|---|---|
+| <code>contextMenus</code> | Adds the Send Email right-click action |
+| <code>storage</code> | Stores extension settings |
+| <code>identity</code> | Handles Google OAuth |
+| <code>notifications</code> | Shows extension errors |
+
+It also requests API host access for Google Drive and Gmail.
+
+---
+
+# Privacy and security
+
+- No email is sent automatically.
+- No Gmail password is collected.
+- No backend server is required.
+- No API key is required for the normal Gmail compose workflow.
+- Google OAuth is used only for the optional Drive attachment/Gmail draft workflow.
+- Your template is stored in Chrome extension storage.
+- You remain responsible for reviewing the recipient, message, and attachment before sending.
+
+---
+
+# Development
+
+Normal users do not need Node.js.
+
+Developers can run:
+
+~~~bash
+npm install
+npm test
+npm run check
+npm run validate
+~~~
+
+The extension has no build step.
+
+GitHub Actions validates the project on pushes and pull requests.
+
+---
+
+# Architecture
+
+~~~text
+Browser
+  │
+  ├── Context Menu
+  │      └── Send Email
+  │
+  ├── Email Parser
+  │      └── Recipient + Name
+  │
+  ├── Template Engine
+  │      └── Subject + Body
+  │
+  ├── Normal Gmail Flow
+  │      └── Gmail compose URL
+  │
+  └── Optional Attachment Rule
+         │
+         ├── Google Identity
+         ├── Google Drive
+         │      └── Resume file
+         │
+         └── Gmail API
+                └── Draft + Attachment
+                    ↓
+                User Review
+                    ↓
+                User Send
+~~~
+
+---
+
+# Roadmap
+
+- Multiple reusable templates
+- <code>{{company}}</code> and <code>{{role}}</code>
+- Template picker
+- Better recruiter/company detection
+- Outlook support
+- Import/export settings
+- Chrome Web Store distribution
+- Easier onboarding for non-technical users
+
+---
+
+# Current version
 
 ~~~text
 0.2.1
