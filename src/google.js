@@ -74,9 +74,9 @@ export function buildMimeMessage({ to, cc, subject, body, attachment }) {
   const textPart = [
     `--${boundary}`,
     "Content-Type: text/plain; charset=UTF-8",
-    "Content-Transfer-Encoding: 8bit",
+    "Content-Transfer-Encoding: base64",
     "",
-    body
+    wrapBase64(toBase64(new TextEncoder().encode(body)))
   ].join("\r\n");
 
   const attachmentPart = [
