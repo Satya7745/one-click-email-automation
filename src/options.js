@@ -4,17 +4,33 @@ const DEFAULTS = {
   composeMode: "gmail",
   cc: "",
   subject: "Quick introduction",
-  body: "Hi {{name}},\n\nI came across your profile and wanted to reach out regarding an opportunity.\n\nBest regards,\nSatya Vijay",
-  name: "Satya Vijay"
+  body: "Hi {{name}},\n\nI came across your profile and wanted to reach out regarding an opportunity.\n\nBest regards,\n{{senderName}}",
+  name: "Satya Vijay",
+  attachResume: false,
+  resumeDriveFileId: "",
+  resumeLabel: "Resume"
 };
 
-const fields = ["composeMode", "name", "cc", "subject", "body"];
+const fields = [
+  "composeMode",
+  "name",
+  "cc",
+  "subject",
+  "body",
+  "resumeDriveFileId",
+  "resumeLabel"
+];
+
 const status = document.getElementById("status");
+const attachResume = document.getElementById("attachResume");
+const composeMode = document.getElementById("composeMode");
 
 load();
 
 document.getElementById("save").addEventListener("click", save);
 document.getElementById("reset").addEventListener("click", reset);
+attachResume.addEventListener("change", refreshAttachmentState);
+composeMode.addEventListener("change", refreshAttachmentState);
 
 async function load() {
   const stored = await chrome.storage.sync.get(STORAGE_KEY);
@@ -23,6 +39,9 @@ async function load() {
   for (const field of fields) {
     document.getElementById(field).value = settings[field] ?? "";
   }
+
+  attachResume.checked = Boolean(settings.attachResume);
+  refreshAttachmentState();
 }
 
 async function save() {
@@ -38,15 +57,33 @@ async function reset() {
 }
 
 function readForm() {
-  return Object.fromEntries(
-    fields.map((field) => [field, document.getElementById(field).value.trim()])
-  );
+  return {
+    composeMode: document.getElementById("composeMode").value,
+    name: document.getElementById("name").value.trim(),
+    cc: document.getElementById("cc").value.trim(),
+    subject: document.getElementById("subject").value.trim(),
+    body: document.getElementById("body").value.trim(),
+    attachResume: attachResume.checked,
+    resumeDriveFileId: document.getElementById("resumeDriveFileId").value.trim(),
+    resumeLabel: document.getElementById("resumeLabel").value.trim() || "Resume"
+  };
+}
+
+function refreshAttachmentState() {
+  const enabled = attachResume.checked && composeMode.value === "gmail";
+  document.getElementById("resumeDriveFileId").disabled = !enabled;
+  document.getElementById("resumeLabel").disabled = !enabled;
+
+  if (attachResume.checked && composeMode.value !== "gmail") {
+    showStatus("Drive attachments require Gmail compose mode.");
+  }
 }
 
 function showStatus(message) {
   status.textContent = message;
   clearTimeout(showStatus.timer);
+
   showStatus.timer = setTimeout(() => {
     status.textContent = "";
-  }, 2500);
+  }, 3000);
 }
