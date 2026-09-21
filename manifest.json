@@ -1,9 +1,25 @@
 {
   "manifest_version": 3,
   "name": "One-Click Email Automation",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Prepare repetitive email outreach in seconds from any email address on a webpage.",
-  "permissions": ["contextMenus", "storage"],
+  "permissions": [
+    "contextMenus",
+    "storage",
+    "identity",
+    "notifications"
+  ],
+  "host_permissions": [
+    "https://www.googleapis.com/*",
+    "https://gmail.googleapis.com/*"
+  ],
+  "oauth2": {
+    "client_id": "YOUR_GOOGLE_OAUTH_CLIENT_ID.apps.googleusercontent.com",
+    "scopes": [
+      "https://www.googleapis.com/auth/drive.readonly",
+      "https://www.googleapis.com/auth/gmail.compose"
+    ]
+  },
   "background": {
     "service_worker": "src/background.js",
     "type": "module"
