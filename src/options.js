@@ -54,9 +54,16 @@ async function save() {
 async function connectGoogle() {
   const button = document.getElementById("connectGoogle");
   button.disabled = true;
-  showStatus("Connecting to Google…");
 
   try {
+    const manifest = chrome.runtime.getManifest();
+    const clientId = manifest.oauth2?.client_id || "";
+
+    if (!clientId || clientId.includes("YOUR_GOOGLE_OAUTH_CLIENT_ID")) {
+      throw new Error("Google OAuth client ID is still a placeholder in manifest.json.");
+    }
+
+    showStatus("Connecting to Google…");
     const result = await chrome.identity.getAuthToken({ interactive: true });
 
     if (!result?.token) {
