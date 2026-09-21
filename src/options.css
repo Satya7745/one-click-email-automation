@@ -17,6 +17,7 @@ h1 { margin: 0; font-size: 31px; letter-spacing: -.03em; }
 h2 { margin: 0 0 4px; font-size: 19px; }
 h3 { margin: 0 0 2px; font-size: 16px; }
 .subtitle, .card-header p, .attachment p { color: #64748b; margin: 7px 0 0; }
+.setup-note { margin: 10px 0 0; padding: 10px 12px; border-radius: 9px; background: #f7f8fc; color: #536174; font-size: 12px; }
 .card, .info {
   background: #fff; border: 1px solid #e4e9f2; border-radius: 18px;
   box-shadow: 0 12px 32px rgba(20, 30, 55, .06);
@@ -40,6 +41,7 @@ code { padding: 2px 5px; border-radius: 5px; background: #eef0ff; color: #4652b8
 .switch-row input { width: auto; }
 .actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 24px; }
 button { border: 0; border-radius: 9px; padding: 11px 17px; font: inherit; font-weight: 700; cursor: pointer; }
+button:disabled { opacity: .6; cursor: wait; }
 .primary { background: #4f5bd5; color: #fff; }
 .primary:hover { background: #414dbb; }
 .secondary { background: #eef1f6; color: #334155; }
