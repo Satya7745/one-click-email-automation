@@ -254,6 +254,8 @@ Uses a standard <code>mailto:</code> link and lets the operating system/browser 
 
 The extension can also attach a file from Google Drive to the Gmail **draft** it creates.
 
+**Current default:** Attach resume is OFF. Your resume file ID is pre-configured, so you only need to enable the attachment rule after completing Google OAuth setup.
+
 This is still **rule-based**. There is no AI deciding whether to attach the file.
 
 The rule is:
@@ -452,21 +454,50 @@ one-click-email-automation/
 │   └── icon128.png
 │
 ├── src/
-│   ├── background.js      # Context-menu workflow
-│   ├── options.css        # Settings UI
+│   ├── background.js      # Context-menu workflow + rules
+│   ├── google.js          # Drive download + Gmail draft attachment
+│   ├── options.css        # Settings UI styling
 │   ├── options.html       # Settings page
-│   ├── options.js         # Settings persistence
-│   └── utils.js            # Email parsing + URL generation
+│   ├── options.js         # Settings persistence + Google connection
+│   └── utils.js           # Email parsing + compose URL generation
 │
 ├── test/
 │   └── utils.test.js      # Unit tests
 │
 ├── .gitignore
 ├── LICENSE
-├── manifest.json          # Chrome MV3 configuration
+├── manifest.json          # Chrome MV3 + OAuth configuration
 ├── package.json
 └── README.md
 ~~~
+
+---
+
+# Current default configuration
+
+The prototype is pre-configured for your recruiter outreach workflow:
+
+~~~text
+Name:
+Satya Vijay
+
+Compose mode:
+Gmail
+
+Subject:
+AI/ML Engineer | 3.2 Years | LLMs, RAG & Agentic AI (Open to opportunities)
+
+Resume file ID:
+1N9SC-cyHicZQe-9xohpLRCT6hL4XK2W1
+
+Resume label:
+Satya Vijay - Resume.pdf
+
+Attach resume:
+OFF by default
+~~~
+
+The attachment is intentionally **OFF by default** because Google OAuth is required before the extension can access Drive and create a Gmail draft with an attachment.
 
 ---
 
@@ -605,7 +636,7 @@ Install extension
 # Version
 
 ~~~text
-0.2.0
+0.2.1
 ~~~
 
 ---
