@@ -1,6 +1,6 @@
 {
   "name": "one-click-email-automation",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "private": true,
   "type": "module",
   "description": "Chrome extension for preparing repetitive email outreach.",
