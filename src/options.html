@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>One-Click Email Automation — Settings</title>
+  <link rel="stylesheet" href="options.css">
+</head>
+<body>
+  <main class="page">
+    <header class="hero">
+      <div class="brand-mark" aria-hidden="true">@</div>
+      <div>
+        <p class="eyebrow">ONE-CLICK EMAIL AUTOMATION</p>
+        <h1>Email template settings</h1>
+        <p class="subtitle">Configure the message prepared when you right-click an email address.</p>
+      </div>
+    </header>
+
+    <section class="card">
+      <div class="card-header">
+        <div>
+          <h2>Compose behavior</h2>
+          <p>Choose where the prepared message should open.</p>
+        </div>
+      </div>
+
+      <label class="field">
+        <span>Compose mode</span>
+        <select id="composeMode">
+          <option value="gmail">Gmail web compose</option>
+          <option value="mailto">Default mail client (mailto:)</option>
+        </select>
+      </label>
+
+      <div class="grid">
+        <label class="field">
+          <span>Your name</span>
+          <input id="name" type="text" placeholder="Your Name" autocomplete="name">
+        </label>
+
+        <label class="field">
+          <span>CC</span>
+          <input id="cc" type="email" placeholder="team@example.com">
+        </label>
+      </div>
+
+      <label class="field">
+        <span>Subject</span>
+        <input id="subject" type="text" placeholder="Quick introduction">
+      </label>
+
+      <label class="field">
+        <span>Message body</span>
+        <textarea id="body" rows="14" placeholder="Write your reusable email template..."></textarea>
+        <small>Supported placeholders: <code>{{name}}</code> and <code>{{email}}</code>.</small>
+      </label>
+
+      <div class="actions">
+        <button id="reset" class="secondary" type="button">Reset defaults</button>
+        <button id="save" class="primary" type="button">Save settings</button>
+      </div>
+      <p id="status" class="status" role="status" aria-live="polite"></p>
+    </section>
+
+    <section class="info">
+      <strong>Workflow</strong>
+      <span>Right-click an email → <b>Send Email</b> → review the prepared message → send.</span>
+    </section>
+
+    <footer>
+      <span>Prototype v0.1.0</span>
+      <span>No email is sent automatically.</span>
+    </footer>
+  </main>
+  <script src="options.js"></script>
+</body>
+</html>
