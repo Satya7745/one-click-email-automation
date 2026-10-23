@@ -2,7 +2,7 @@ package com.satya.localassistant
 
 import android.Manifest
 import android.app.Activity
-import android.app.AlarmClock
+import android.provider.AlarmClock
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
