@@ -6,11 +6,11 @@ android {
     namespace = "com.satya.localassistant"
     compileSdk = 35
     defaultConfig {
-        applicationId = "com.satya.localassistant"
+        applicationId = "com.satya.pocketassistant"
         minSdk = 26
         targetSdk = 34
-        versionCode = 1
-        versionName = "0.1.0"
+        versionCode = 2
+        versionName = "0.2.0"
     }
     buildTypes {
         debug { applicationIdSuffix = ".debug"; versionNameSuffix = "-debug" }
