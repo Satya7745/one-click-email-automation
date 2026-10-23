@@ -1,4 +1,4 @@
-name: Build Pocket Assistant APK
+name: Build Pocket Assistant Lite APK
 
 on:
   push:
@@ -13,7 +13,7 @@ permissions:
 
 jobs:
   build:
-    name: Build debug APK
+    name: Build, sign, and inspect APK
     runs-on: ubuntu-latest
     steps:
       - name: Check out source
@@ -40,14 +40,63 @@ jobs:
           yes | "$SDKMANAGER" --licenses >/dev/null || true
           "$SDKMANAGER" "platforms;android-35" "build-tools;35.0.0" "platform-tools"
 
-      - name: Compile APK
+      - name: Compile release APK
         working-directory: android-assistant
-        run: gradle assembleDebug --stacktrace
+        run: gradle assembleRelease --stacktrace
 
-      - name: Upload installable APK
+      - name: Align, sign, and inspect APK
+        shell: bash
+        working-directory: android-assistant
+        run: |
+          set -euo pipefail
+          SDK_ROOT="${ANDROID_HOME:-/usr/local/lib/android/sdk}"
+          BUILD_TOOLS="$SDK_ROOT/build-tools/35.0.0"
+          UNSIGNED="app/build/outputs/apk/release/app-release-unsigned.apk"
+          ALIGNED="$RUNNER_TEMP/PocketAssistant-Lite-aligned.apk"
+          SIGNED="$GITHUB_WORKSPACE/PocketAssistant-Lite.apk"
+          KEYSTORE="$RUNNER_TEMP/pocket-assistant-release.p12"
+          STORE_PASS="$(openssl rand -hex 24)"
+
+          test -f "$UNSIGNED"
+          keytool -genkeypair -noprompt \
+            -alias pocketassistant -keyalg RSA -keysize 3072 \
+            -validity 10000 -storetype PKCS12 -keystore "$KEYSTORE" \
+            -storepass "$STORE_PASS" -keypass "$STORE_PASS" \
+            -dname "CN=Pocket Assistant Lite, OU=Prototype, O=Personal App, L=Hyderabad, ST=Telangana, C=IN"
+
+          "$BUILD_TOOLS/zipalign" -f -p 4 "$UNSIGNED" "$ALIGNED"
+          "$BUILD_TOOLS/apksigner" sign \
+            --ks "$KEYSTORE" --ks-type PKCS12 --ks-key-alias pocketassistant \
+            --ks-pass "pass:$STORE_PASS" --key-pass "pass:$STORE_PASS" \
+            --out "$SIGNED" "$ALIGNED"
+
+          "$BUILD_TOOLS/apksigner" verify --verbose --print-certs "$SIGNED" | tee "$GITHUB_WORKSPACE/APK-SIGNATURE-REPORT.txt"
+          "$SDK_ROOT/cmdline-tools/16.0/bin/apkanalyzer" manifest permissions "$SIGNED" | tee "$GITHUB_WORKSPACE/APK-PERMISSIONS-REPORT.txt"
+
+          if grep -Eiq 'RECORD_AUDIO|INTERNET|READ_SMS|RECEIVE_SMS|READ_CONTACTS|READ_CALL_LOG|BIND_ACCESSIBILITY_SERVICE|BIND_NOTIFICATION_LISTENER_SERVICE' "$GITHUB_WORKSPACE/APK-PERMISSIONS-REPORT.txt"; then
+            echo "Unexpected high-risk permission found; failing build."
+            exit 1
+          fi
+
+          sha256sum "$SIGNED" | tee "$GITHUB_WORKSPACE/SHA256SUMS.txt"
+          cat > "$GITHUB_WORKSPACE/INSTALL-NOTES.txt" <<'EOF'
+          Pocket Assistant Lite 0.2.0
+          - Self-signed release APK for testing; not Play Store certified.
+          - Declared permission: alarm creation (com.android.alarm.permission.SET_ALARM).
+          - No microphone, Internet, SMS, contacts, notification listener, or accessibility permissions.
+          - The release signing key was generated for this build only. Future builds will not update this install; uninstall this version before installing a separately signed future build.
+          - This signing and permission review does not guarantee Play Protect will allow installation.
+          EOF
+
+      - name: Upload inspected release package
         uses: actions/upload-artifact@v4
         with:
-          name: PocketAssistant-debug-apk
-          path: android-assistant/app/build/outputs/apk/debug/app-debug.apk
+          name: PocketAssistant-Lite-release
+          path: |
+            PocketAssistant-Lite.apk
+            APK-SIGNATURE-REPORT.txt
+            APK-PERMISSIONS-REPORT.txt
+            SHA256SUMS.txt
+            INSTALL-NOTES.txt
           if-no-files-found: error
           retention-days: 30
