@@ -71,7 +71,7 @@ jobs:
             --out "$SIGNED" "$ALIGNED"
 
           "$BUILD_TOOLS/apksigner" verify --verbose --print-certs "$SIGNED" | tee "$GITHUB_WORKSPACE/APK-SIGNATURE-REPORT.txt"
-          "$SDK_ROOT/cmdline-tools/16.0/bin/apkanalyzer" manifest permissions "$SIGNED" | tee "$GITHUB_WORKSPACE/APK-PERMISSIONS-REPORT.txt"
+          "$BUILD_TOOLS/aapt" dump permissions "$SIGNED" | tee "$GITHUB_WORKSPACE/APK-PERMISSIONS-REPORT.txt"
 
           if grep -Eiq 'RECORD_AUDIO|INTERNET|READ_SMS|RECEIVE_SMS|READ_CONTACTS|READ_CALL_LOG|BIND_ACCESSIBILITY_SERVICE|BIND_NOTIFICATION_LISTENER_SERVICE' "$GITHUB_WORKSPACE/APK-PERMISSIONS-REPORT.txt"; then
             echo "Unexpected high-risk permission found; failing build."
