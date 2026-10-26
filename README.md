@@ -264,7 +264,7 @@ Resume:
 Satya Vijay - Resume.pdf
 
 Drive file ID:
-1N9SC-cyHicZQe-9xohpLRCT6hL4XK2W1
+1JpONYH0X307R56vuAWarl0u2AfyMqIUr
 ~~~
 
 The resume attachment is **OFF by default** until Google OAuth is connected.
@@ -317,7 +317,7 @@ FILE_ID
 For your current resume:
 
 ~~~text
-1N9SC-cyHicZQe-9xohpLRCT6hL4XK2W1
+1JpONYH0X307R56vuAWarl0u2AfyMqIUr
 ~~~
 
 Click:
