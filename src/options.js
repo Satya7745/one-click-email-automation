@@ -35,7 +35,10 @@ composeMode.addEventListener("change", refreshAttachmentState);
 
 async function load() {
   const stored = await chrome.storage.sync.get(STORAGE_KEY);
-  const settings = { ...DEFAULTS, ...(stored[STORAGE_KEY] || {}) };
+  const settings = migrateResumeSettings({ ...DEFAULTS, ...(stored[STORAGE_KEY] || {}) });
+  if (stored[STORAGE_KEY] && JSON.stringify(settings) !== JSON.stringify({ ...DEFAULTS, ...(stored[STORAGE_KEY] || {}) })) {
+    await chrome.storage.sync.set({ [STORAGE_KEY]: settings });
+  }
 
   for (const field of fields) {
     document.getElementById(field).value = settings[field] ?? "";
@@ -43,6 +46,16 @@ async function load() {
 
   attachResume.checked = Boolean(settings.attachResume);
   refreshAttachmentState();
+}
+
+function migrateResumeSettings(settings) {
+  const oldId = "1N9SC-cyHicZQe-9xohpLRCT6hL4XK2W1";
+  const newId = "1JpONYH0X307R56vuAWarl0u2AfyMqIUr";
+  if (settings.resumeDriveFileId === oldId) settings.resumeDriveFileId = newId;
+  if (typeof settings.body === "string" && settings.body.includes(oldId)) {
+    settings.body = settings.body.replaceAll(oldId, newId);
+  }
+  return settings;
 }
 
 async function save() {
