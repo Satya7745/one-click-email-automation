@@ -17,10 +17,10 @@ const DEFAULTS = {
   composeMode: "gmail",
   cc: "",
   subject: "AI/ML Engineer | 3.2 Years | LLMs, RAG & Agentic AI (Open to opportunities)",
-  body: "Hi,\n\nI’m Satya Vijay, an AI/ML Engineer with 3.2 years of experience building and productionizing LLM, RAG, and multi-agent AI systems for enterprise environments, including work associated with Microsoft and LTIMindtree.\n\nI specialize in designing and shipping end-to-end Generative AI solutions, covering the complete lifecycle from document ingestion → embeddings → vector indexing → retrieval → streaming RAG → productionized agent orchestration across Azure and Google platforms.\n\nRELEVANT HIGHLIGHTS\n\nProduction LLMs & Agentic AI\n• LangChain, AutoGen, OpenAI AgentKit\n• Azure OpenAI, Google Opal, Microsoft Copilot Studio\n• Multi-agent orchestration and production AI workflows\n\nRAG & Vector Search\n• FAISS, Qdrant, Chroma\n• Embedding and document-processing pipelines\n• Incremental indexing and retrieval optimization\n• Precision@k and retrieval-quality optimization\n\nMLOps & Production Engineering\n• Docker, Kubernetes\n• CI/CD with GitHub Actions and Azure DevOps\n• Databricks\n• Production observability covering latency, token consumption, failure rates, and reliability\n\nPROJECT IMPACT\n\n• Led development of a Response AI multi-agent system and production RAG pipelines\n• Worked on improving production reliability, query latency, and operational cost\n• Recognized with a Super Crew Award for project contributions\n\nI’m currently exploring opportunities in AI/ML, Generative AI, LLM Engineering, RAG, and Agentic AI where I can contribute to building scalable, production-grade AI systems.\n\nIf my background aligns with the roles you are hiring for, I would appreciate the opportunity for a 15-minute conversation to discuss the role, team, and potential fit.\n\nCONTACT\n\nPhone: +91 93915 20600\nEmail: akellasrisatyavijay@gmail.com\nLinkedIn: https://www.linkedin.com/in/satyavijay/\nPortfolio: https://satya7745.github.io/Portfolio/\nResume: https://drive.usercontent.google.com/download?id=1N9SC-cyHicZQe-9xohpLRCT6hL4XK2W1&export=download\n\nThank you for your time. I look forward to connecting.\n\nBest regards,\nSatya Vijay",
+  body: "Hi,\n\nI’m Satya Vijay, an AI/ML Engineer with 3.2 years of experience building and productionizing LLM, RAG, and multi-agent AI systems for enterprise environments, including work associated with Microsoft and LTIMindtree.\n\nI specialize in designing and shipping end-to-end Generative AI solutions, covering the complete lifecycle from document ingestion → embeddings → vector indexing → retrieval → streaming RAG → productionized agent orchestration across Azure and Google platforms.\n\nRELEVANT HIGHLIGHTS\n\nProduction LLMs & Agentic AI\n• LangChain, AutoGen, OpenAI AgentKit\n• Azure OpenAI, Google Opal, Microsoft Copilot Studio\n• Multi-agent orchestration and production AI workflows\n\nRAG & Vector Search\n• FAISS, Qdrant, Chroma\n• Embedding and document-processing pipelines\n• Incremental indexing and retrieval optimization\n• Precision@k and retrieval-quality optimization\n\nMLOps & Production Engineering\n• Docker, Kubernetes\n• CI/CD with GitHub Actions and Azure DevOps\n• Databricks\n• Production observability covering latency, token consumption, failure rates, and reliability\n\nPROJECT IMPACT\n\n• Led development of a Response AI multi-agent system and production RAG pipelines\n• Worked on improving production reliability, query latency, and operational cost\n• Recognized with a Super Crew Award for project contributions\n\nI’m currently exploring opportunities in AI/ML, Generative AI, LLM Engineering, RAG, and Agentic AI where I can contribute to building scalable, production-grade AI systems.\n\nIf my background aligns with the roles you are hiring for, I would appreciate the opportunity for a 15-minute conversation to discuss the role, team, and potential fit.\n\nCONTACT\n\nPhone: +91 93915 20600\nEmail: akellasrisatyavijay@gmail.com\nLinkedIn: https://www.linkedin.com/in/satyavijay/\nPortfolio: https://satya7745.github.io/Portfolio/\nResume: https://drive.usercontent.google.com/download?id=1JpONYH0X307R56vuAWarl0u2AfyMqIUr&export=download\n\nThank you for your time. I look forward to connecting.\n\nBest regards,\nSatya Vijay",
   name: "Satya Vijay",
   attachResume: false,
-  resumeDriveFileId: "1N9SC-cyHicZQe-9xohpLRCT6hL4XK2W1",
+  resumeDriveFileId: "1JpONYH0X307R56vuAWarl0u2AfyMqIUr",
   resumeLabel: "Satya Vijay - Resume.pdf"
 };
 
@@ -92,7 +92,23 @@ async function ensureDefaults() {
 
 async function getSettings() {
   const stored = await chrome.storage.sync.get(STORAGE_KEY);
-  return { ...DEFAULTS, ...(stored[STORAGE_KEY] || {}) };
+  const saved = stored[STORAGE_KEY] || {};
+  const settings = { ...DEFAULTS, ...saved };
+  let changed = false;
+
+  if (settings.resumeDriveFileId === "1N9SC-cyHicZQe-9xohpLRCT6hL4XK2W1") {
+    settings.resumeDriveFileId = "1JpONYH0X307R56vuAWarl0u2AfyMqIUr";
+    changed = true;
+  }
+  if (typeof settings.body === "string" && settings.body.includes("1N9SC-cyHicZQe-9xohpLRCT6hL4XK2W1")) {
+    settings.body = settings.body.replaceAll("1N9SC-cyHicZQe-9xohpLRCT6hL4XK2W1", "1JpONYH0X307R56vuAWarl0u2AfyMqIUr");
+    changed = true;
+  }
+
+  if (changed) {
+    await chrome.storage.sync.set({ [STORAGE_KEY]: settings });
+  }
+  return settings;
 }
 
 function prepareMessage(email, info, settings) {
